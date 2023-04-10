@@ -383,13 +383,196 @@ $$\gamma(\mathbf{x}) = \dfrac{f(\mathbf{x}_{best}) - \mu(\mathbf{x}; \{ \mathbf{
 
 - 다시 말하면 exploit에 집중하느라 explore에 취약하다는 단점이 있다.
 
-- 
+- Expected improvement (EI)는 utility function을 0, 1이 아니라, linear 꼴로 정의하기 때문에 그 차이를 반영할 수 있다.
 
+- 주의할 점은, EI가 PI의 expectation이 아니라는 점이다. 그냥 이름만 비슷한거고 완전히 다른 function이라고 생각하면 된다. PI와 마찬가지로 EI역시 u(x)의 expectation을 계산해야 한다.
+
+- EI를 그림으로 나타내면 다음과 같다. PI처럼 이미 explore가 많이 된 곳을 또 찾는 실수는 덜 저지른다는 것을 볼 수 있다.
+
+<div style="text-align: center;">
+  <img src="./img/1-2.png"  alt="이미지 설명" style="width: 50%; height: auto;">
+</div>
+
+- Alternatively, one could choose to maximize the expected improvement (EI) over the current best.
+
+- This also has closed form under the Gaussian process: 
+$$a_{EI} (\mathbf{x} ; \{ \mathbf{x}_n  , y_n \}, \theta) = \sigma (\mathbf{x} ; \{ \mathbf{x}_n  , y_n \}, \theta ) (\gamma(\mathbf{x}) \Phi(\gamma(\mathbf{x})) + \mathcal{N}(\gamma(\mathbf{x}); 0, 1))$$
+
+- EI는 주어진 하이퍼파라미터 설정에서 목표 함수의 값이 현재까지 발견된 최적 값보다 얼마나 개선될 것으로 기대되는 정도를 측정
+
+- 탐색-활용(Exploration-Exploitation) 트레이드오프를 관리하는 데 도움이 되며, 현재까지 알려진 최적의 지점 근처에서 더 나은 값을 찾거나, 아직 불확실한 영역을 탐색하는 데 사용
+
+
+
+- 이 수식은 주어진 하이퍼파라미터 설정 $\mathbf{x}$에 대한 Expected Improvement 값을 계산하는 방법을 보여줍니다. 여기서 $\theta$는 서로게이트 모델(가우시안 프로세스)의 파라미터, ${ \mathbf{x}_n, y_n }$은 현재까지 관측된 하이퍼파라미터 설정과 목표 함수 값들입니다.
+
+- 수식의 각 요소는 다음과 같은 의미를 가집니다:
+
+    - $\sigma (\mathbf{x} ; { \mathbf{x}_n , y_n }, \theta )$: 예측된 불확실성을 나타냅니다. 불확실성이 큰 지점에서는 탐색이 이루어질 가능성이 높습니다.
+    - $\gamma(\mathbf{x}) \Phi(\gamma(\mathbf{x}))$: 목표 함수 값이 현재 최적의 값보다 클 확률을 나타냅니다.
+    - $\mathcal{N}(\gamma(\mathbf{x}); 0, 1)$: 확률밀도함수를 통해 현재 지점의 확률적 특성을 나타냅니다.
+
+- 이 수식을 통해 각 하이퍼파라미터 설정에 대한 Expected Improvement 값을 계산할 수 있으며, 가장 큰 Expected Improvement 값을 가진 하이퍼파라미터 설정을 선택합니다. 이렇게 선택된 하이퍼파라미터 설정은 다음 단계에서 머신러닝 모델의 성능 평가에 사용됩니다.
 
 <br>
 
 ### 2.2.3. GP Upper Confidence Bound
 
+- 이 방법은 주어진 하이퍼파라미터 설정에 대한 목표 함수의 예측 평균과 불확실성을 동시에 고려하여 탐색-활용 트레이드오프를 관리합니다. UCB는 예측 평균과 불확실성에 대한 가중치를 조절하는 하이퍼파라미터인 $\kappa$를 사용합니다.
+
+- A more recent development is the idea of exploiting lower
+confidence bounds (upper, when considering maximization) to construct acquisition functions that minimize regret over the course of their optimization
+
+- 
+
+$$a_{LCB} (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta) = \mu (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta) - \kappa \sigma (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta)$$
+
+
+- 이 수식의 각 요소는 다음과 같은 의미를 가집니다:
+
+    - $\mu (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta)$: 가우시안 프로세스에서 예측된 평균입니다. 이 값은 현재 하이퍼파라미터 설정에 대한 목표 함수 값의 추정치를 나타냅니다.
+    - $\sigma (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta)$: 예측된 표준편차로, 현재 하이퍼파라미터 설정에 대한 불확실성을 나타냅니다.
+    - $\kappa$: 탐색-활용 트레이드오프를 조절하는 하이퍼파라미터입니다. 값이 클수록 불확실성이 높은 영역에 더 많은 가중치를 부여하고, 값이 작을수록 예측 평균에 더 많은 가중치를 부여합니다.
+
+- Form도 간단하고, 조절하기 쉽기도 하지만, hyperparameter를 또 조정해야한다는 문제 때문에 이 논문에서는 다루지 않는다.
+
+<div style="text-align: center;">
+  <img src="./img/1-3.png"  alt="이미지 설명" style="width: 50%; height: auto;">
+</div>
+
+---
+
+
+
+
+
+
+
+
+
+- 저자는 예상 개선(Expected Improvement, EI) 기준에 중점을 둘 것이라고 언급하고 있습니다. EI는 개선 확률(Probability of Improvement)보다 더 낫게 작동하는 것으로 나타났습니다. 또한 GP-UCB와는 달리, 별도의 튜닝 매개변수가 필요하지 않다는 장점이 있습니다.
+
+
+<br>
+<br>
+
+# 3.  Practical Considerations for Bayesian Optimization of Hyperparameters.
+
+- 😑 Bayesian optimization은 굉장히 impractical하다. 여러가지 이유가 있는데, 크게는 다음과 같은 이유들이 있다. 
+
+    - Hyperparameter search를 하기 위해 BO를 사용하는데, BO를 사용하기 위해서는 GP의 hyperparameter들을 튜닝해야한다 (kernel function의 parameter 등)
+    - 어떤 stochastic assumption을 하느냐에 따라 (어떤 kernel function을 사용해야할지 등) 결과가 천차만별로 바뀌는데, (model selection에 민감한데) 어떤 선택이 가장 좋은지에 대한 가이드가 전혀 없다.
+    - Acquisition function을 사용해 다음 지점을 찾는 과정 자체가 sequential하기 때문에 grid search나 random search와는 다르게 parallelization이 불가능하다.
+    - 위에 대한 문제점들이 전부 해결된다고 하더라도 software implementation이 쉽지 않다.
+
+
+<br>
+
+
+
+- 😀 이런 문제점들을 해결하기 위해 이 논문은 먼저 kernel function을 여러 실험적 결과 등을 통해 Matern 5/2 kernel이 가장 실험적으로 좋은 결과를 낸다는 결론을 내린다 (즉, kernel function은 언제나 Matern 5/2를 쓰면 된다). 
+- 또한 acquisition function도 EI로 고정한다. 
+- 다음으로 GP의 hyperparameter들을 Bayesian approach를 통해 acquisition function을 hyperparameter에 대해 marginalize한다. 이 marginalized acquisition function은 (integrated acquisition function이라고 한다) MCMC로 풀 수 있다. 
+
+- 마지막으로 이 논문은 이론적으로 tractable한 Bayesian optimization의 parallelized version을 (MCMC estimation이다) 제안한다.
+
+
 
 
 ---
+ 
+<br>
+
+- 하이퍼파라미터의 베이지안 최적화에 대한 실용적인 고려 사항에 대해 설명하고 있습니다. 비록 비용이 많이 드는 함수를 최적화하는 우아한 프레임워크지만, 몇 가지 한계로 인해 머신러닝 문제에서 하이퍼파라미터 최적화를 위한 널리 사용되는 기법이 되지 못했습니다. 
+- 이러한 한계는 공분산 함수와 관련된 하이퍼파라미터의 선택, 함수 평가 시간, 다중 코어 병렬성 활용 등에 관련되어 있습니다. 이 문단에서는 이러한 문제에 대한 해결책을 제안하고 있습니다.
+
+    - First, it is unclear for practical problems what an appropriate choice is for the covariance function and its associated hyperparameters.
+
+    - Second, as the function evaluation itself may involve a time-consuming optimization procedure, problems may vary significantly in duration and this should be taken into account.
+
+    - Third, optimization algorithms should take advantage of multi-core parallelism in order to map well onto modern computational environments.
+
+
+
+
+
+
+## 3.1. Covariance Functions and Treatment of Covariance Hyperparameters.
+
+- **Automatic relevance determination (ARD) squared exponential kernel** is often a default choice for Gaussian process regression:
+
+
+$$K_{SE}(\mathbf{x}, \mathbf{x'}) = \theta_0 \exp\{ -\dfrac{1}{2} r^2 (\mathbf{x}, \mathbf{x'}) \}$$
+$$r^2(\mathbf{x}, \mathbf{x'}) = \sum^D_{d = 1} (x_d - x'_d)^2 / \theta^2_d$$
+
+
+
+
+- However, sample functions with this covariance function are unrealistically smooth for practical optimization problems.
+
+- 가장 많이 쓰이는 Squared-exponential function의 가장 큰 문제는 ‘smoothness’로, 복잡한 모델을 표현하기에는 너무 ‘smooth’한 function만 estimate할 수 있다는 단점이 있다.
+
+
+<br>
+
+- 이를 해결하기 위해 이 논문에서는 Matern kernel function을 사용하며, 특히 그 hyperparameter로 5와 2를 사용하는 Matern 5/2를 사용하고 있다. 
+- 실제로 structured SVM의 hyperparameter를 찾을 때 여러 kernel function 중에서 가장 좋은 kernel이 무엇인지 아래와 같은 실험들 끝에 얻은 결과이다.
+
+- We instead
+propose the use of the **ARD Matern 5/2 kernel**:
+$$K_{M52} (\mathbf{x}, \mathbf{x'}) = \theta_0(1 + \sqrt{5r^2(\mathbf{x}, \mathbf{x'})} + \dfrac{5}{3}r^2 (\mathbf{x}, \mathbf{x'}) )\exp\{ -\sqrt{5r^2 (\mathbf{x}, \mathbf{x'}) } \}$$
+
+- This covariance function results in sample functions which are twice differentiable, an assumption that corresponds to those made by, e.g., quasi-Newton methods, but without requiring the smoothness of the squared exponential.
+
+- 이 GP의 hyperparameter는 $\theta_0, \theta_d$로, d가 1부터 D까지 있으니 총 D+1 개의 hyperparameter를 필요로 한다.
+
+
+<br>
+
+---
+
+- After choosing the form of the covariance, we must also manage the hyperparameters that govern its behavior, as well as that of the mean function.
+
+- 이제 covariance의 형태를 결정했으니, GP의 hyperparameter를 없애는 일이 남았다.
+
+- 우리가 optimize하고 싶은 hyperparameter의 dimension이 D라고 해보자
+
+- 이때 GP의 hyperparameter의 개수는 D+3개가 된다:
+    - 바로 앞에서 언급한 D+1개와, constant mean function의 값 $m$, 그리고 noise $\nu$
+
+<br>
+
+
+- (이 논문에서는 <u>hyperparameter를 완전하게 Bayesian으로 처리하기 위하여</u> 모든 hyperparameter $\theta$ (D+3 dimensional vector)에 대해 acquisition function을 marginalize한 다음에, 다음과 같은 integrated acquisition function을 계산하는 방법을 제안)
+
+- The most commonly advocated approach is to use a point estimate of these parameters by optimizing the marginal likelihood under the Gaussian process:
+
+$$p(\mathbf{y} | \{ \mathbf{x} \}^N_{n=1}, \theta, \nu, m ) = \mathcal{N} (\mathbf{y} | m\mathbf{1}, \boldsymbol{\Sigma}_{\theta} + \nu \mathbf{I}),$$ 
+
+- where  $\mathbf{y} = [y_1, y_2, \cdots, y_n]^\top$, and $\boldsymbol{\Sigma}_{\theta}$ is the covariance matrix resulting from the $N$ input points under the hyperparameters $\theta$.
+
+
+- However, for a fully-Bayesian treatment of hyperparameters (summarized here by $\theta$ alone), **it is desirable to marginalize over hyperparameters and compute the <u>integrated acquisition function</u>**:
+
+$$\hat{a}(\mathbf{x}; \{\mathbf{x}_n , y_n \}) = \int a(\mathbf{x} ; \{ \mathbf{x}, y_n \}, \theta) p (\theta | \{ \mathbf{x}_n, y_n \}^N_{n=1}) d\theta$$
+
+- where $a(\mathbf{x})$ depends on $\theta$ and all of the observations. 
+
+<br>
+
+- PI와 EI에 대해서는 이 integrated acquisition function을 계산하기 위해 다양한 GP hyperparameter에 대한 GP posterior를 계산한 다음, integrated acquisition function의 Monte Carlo estimatation을 구하는 것이 가능.
+
+
+- We can therefore blend acquisition functions arising from samples from
+the posterior over GP hyperparameters and have a Monte Carlo estimate of the integrated expected improvement.
+
+    - These samples can be acquired efficiently using slice sampling, as
+described in Murray and Adams (2010)
+
+
+- 베이지안 최적화에서 하이퍼파라미터 불확실성을 고려하기 위해, 가우시안 프로세스의 하이퍼파라미터에 대한 사후 분포에서 나온 샘플을 이용하여 취득 함수를 결합하고, 몬테카를로 방법을 사용하여 통합된 예상 개선치를 추정할 수 있습니다. 이를 위해 slice sampling 방법을 사용할 수 있습니다. 최적화와 마르코프 체인 몬테카를로 방법은 계산 비용이 크기 때문에 완전 베이지안 처리가 현실적이며, Figure 1은 통합된 예상 개선치가 취득 함수를 어떻게 변화시키는지 보여줍니다.
+
+
+<div style="text-align: center;">
+  <img src="./img/1-5.png"  alt="이미지 설명" style="width: 50%; height: auto;">
+</div>
