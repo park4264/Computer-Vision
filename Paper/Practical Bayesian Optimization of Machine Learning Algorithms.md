@@ -362,10 +362,10 @@ $$\gamma(\mathbf{x}) = \dfrac{f(\mathbf{x}_{best}) - \mu(\mathbf{x}; \{ \mathbf{
 
     - 따라서, 첫 번째 수식은 $\gamma(\mathbf{x})$를 사용하여 PI를 계산하는 방법을 보여주고, 두 번째 수식은 $\gamma(\mathbf{x})$를 계산하는 방법을 보여줍니다. 이 두 수식을 함께 사용하여 문제 공간의 각 지점에서 개선될 확률을 계산하고, 그 중 최대 개선 확률을 가진 지점을 다음 검색 지점으로 선택할 수 있습니다.
 
-![img](./img/1-1.png)
 
 
 
+<img src="./img/1-1.png"  style="width: 70%; height: auto;">
 
 
 
