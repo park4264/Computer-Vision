@@ -585,6 +585,3 @@ described in Murray and Adams (2010)
 
 
 
-
-
-- 다음과 같은 문제 상황을 가정해보자. N개의 데이터의 evaluation이 끝난 상황이고 $(\{x_n, y_n\}_{n=1}^N)$ J개의 point들에서 $(\{x_j\}_{j=1}^J)$ 실험을 진행 중이라고 가정해보자. (아직 결과는 나오지 않았다) 이론상 지금까지 진행한 실험과 $(\{x_n, y_n\}_{n=1}^N)$ 현재 진행 중인 실험 $(\{x_j\}_{j=1}^J)$ 을 모두 고려하여 다음 point를 고르기 위해서는, acquisition function의 J개의 아직 결과가 나오지 않은 point들에 대한 expectation을 구한 다음, 그 결과를 acquisition function으로 사용하면 된다.
