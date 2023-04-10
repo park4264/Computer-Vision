@@ -506,6 +506,7 @@ $$a_{LCB} (\mathbf{x}; \{ \mathbf{x}_n , y_n \}, \theta) = \mu (\mathbf{x}; \{ \
 
 
 $$K_{SE}(\mathbf{x}, \mathbf{x'}) = \theta_0 \exp\{ -\dfrac{1}{2} r^2 (\mathbf{x}, \mathbf{x'}) \}$$
+
 $$r^2(\mathbf{x}, \mathbf{x'}) = \sum^D_{d = 1} (x_d - x'_d)^2 / \theta^2_d$$
 
 
