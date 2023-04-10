@@ -365,10 +365,11 @@ $$\gamma(\mathbf{x}) = \dfrac{f(\mathbf{x}_{best}) - \mu(\mathbf{x}; \{ \mathbf{
 
 
 
-<img src="./img/1-1.png"  style="width: 70%; height: auto;">
 
 
-
+<div style="text-align: center;">
+  <img src="./img/1-1.png"  alt="이미지 설명" style="width: 50%; height: auto;">
+</div>
 
 
 
