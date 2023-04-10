@@ -121,6 +121,9 @@ Acquisition Function 사용: 탐색-활용 트레이드오프를 고려하여 �
 
 - **Bayesian optimization**은 $f(\mathbf{x})$가 expensive black-box function일 때, 즉 한 번 input을 넣어서 output을 확인하는 것 자체가 cost가 많이 드는 function일 때 많이 사용하는 optimization method이다.
 
+    - ✨✨✨ $\mathbf{x}$를 하이퍼 파라미터들
+    - $f(\mathbf{x})$를 하이퍼 파라미터 $\mathbf{x}$를 사용했을 때의 모델의 성능 (ex. 정확도, error) 라고 생각하면 된다.✨✨✨
+
 - **Bayesian optimization은 다음과 같은 방식으로 작동**
 
     1. ☝🏻먼저 지금까지 관측된 데이터들 $$D = \{(\mathbf{x}_1, f(\mathbf{x}_1)), (\mathbf{x}_2, f(\mathbf{x}_2)), \cdots \}$$ 를 통해, 전체 function $f(\mathbf{x})$를 어떤 방식을 사용해 estimate한다.
@@ -289,7 +292,7 @@ distribution on functions
 
 ## 2.2. Acquisition Functions for Bayesian Optimization
 
-> "Acquisition Functions for Bayesian Optimization"은 베이지안 최적화에서 사용되는 효율적인 실험 실행 방법 중 하나인 획득 함수(acquisition function)에 대한 논문입니다. <u>베이지안 최적화에서 획득 함수는 현재까지 수집한 데이터로부터 새로운 데이터를 수집할 위치를 결정합니다.</u> 이 논문에서는 여러 가지 획득 함수가 소개되며, 효율적인 최적화 알고리즘의 구축을 위한 다양한 기술과 방법이 제안됩니다. 획득 함수는 베이지안 최적화의 성능을 결정하는 중요한 요소 중 하나이므로, 이 논문은 베이지안 최적화를 사용하는 많은 연구자와 엔지니어들에게 유용한 정보를 제공합니다.
+> "Acquisition Functions for Bayesian Optimization"은 베이지안 최적화에서 사용되는 효율적인 실험 실행 방법 중 하나인 획득 함수(acquisition function)에 대한 논문입니다. <u>베이지안 최적화에서 획득 함수는 현재까지 수집한 데이터로부터 새로운 데이터를 수집할 위치를 결정합니다.</u> ✨즉 다음에 시험해볼 하이퍼 파라미터를 결정✨ 이 논문에서는 여러 가지 획득 함수가 소개되며, 효율적인 최적화 알고리즘의 구축을 위한 다양한 기술과 방법이 제안됩니다. 획득 함수는 베이지안 최적화의 성능을 결정하는 중요한 요소 중 하나이므로, 이 논문은 베이지안 최적화를 사용하는 많은 연구자와 엔지니어들에게 유용한 정보를 제공합니다.
 
 - We assume that the function $f(\mathbf{x})$ is drawn from a GP prior,
 - and that our observations are of the form $\{ \mathbf{x}_n, y_n \}^N_{n=1}$, where $y_n \sim \mathcal{N}(f(\mathbf{x}_n, \nu))$
@@ -576,3 +579,11 @@ described in Murray and Adams (2010)
 <div style="text-align: center;">
   <img src="./img/1-5.png"  alt="이미지 설명" style="width: 50%; height: auto;">
 </div>
+
+
+
+
+
+
+
+- 다음과 같은 문제 상황을 가정해보자. N개의 데이터의 evaluation이 끝난 상황이고 $(\{x_n, y_n\}_{n=1}^N)$ J개의 point들에서 $(\{x_j\}_{j=1}^J)$ 실험을 진행 중이라고 가정해보자. (아직 결과는 나오지 않았다) 이론상 지금까지 진행한 실험과 $(\{x_n, y_n\}_{n=1}^N)$ 현재 진행 중인 실험 $(\{x_j\}_{j=1}^J)$ 을 모두 고려하여 다음 point를 고르기 위해서는, acquisition function의 J개의 아직 결과가 나오지 않은 point들에 대한 expectation을 구한 다음, 그 결과를 acquisition function으로 사용하면 된다.
