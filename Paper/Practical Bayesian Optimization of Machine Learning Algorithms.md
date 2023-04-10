@@ -11,7 +11,7 @@
 - *베이지안 최적화(Bayesian optimization)는 값들을 관측해가며 최적의 함수를 찾아가는 글로벌 최적화 기법입니다. 주요 목표는 가능한 한 적은 수의 관측을 통해 목표 함수를 최적화하는 것입니다. 이 방법은 블랙박스 함수에 대해 효과적으로 작동하며, 이러한 함수는 계산 비용이 많이 들거나, 그래디언트 정보가 없거나, 노이즈가 있는 경우에 사용됩니다.*
 
 <details>
-<summary> 이거랑 hyper-parameter를 찾는거랑은 무슨 연관이 있지? 어떻게 hyper-parameter를 찾는거야? </summary>
+<summary> <span style="color: blue; text-decoration: underline;"> 이거랑 hyper-parameter를 찾는거랑은 무슨 연관이 있지? 어떻게 hyper-parameter를 찾는거야? </span> </summary>
 
 - 베이지안 최적화는 하이퍼파라미터 최적화에 널리 사용되는 방법 중 하나입니다. 머신러닝 모델의 성능은 선택된 하이퍼파라미터에 크게 영향을 받습니다. 하이퍼파라미터는 모델 학습 과정에서 자동으로 업데이트되지 않는 모델의 설정 값입니다. 예를 들어, 신경망의 층(layer) 수, 뉴런의 수, 학습률(learning rate), 정규화(regularization) 계수 등이 있습니다.
 
@@ -33,7 +33,7 @@
 </details>
 
 <details>
-<summary>3번 "Acquisition Function 사용" 단계에서 하이퍼파라미터 설정을 선택하는거야?</summary>
+<summary> <span style="color: blue; text-decoration: underline;"> 3번 "Acquisition Function 사용" 단계에서 하이퍼파라미터 설정을 선택하는거야?</span> </summary>
 
 네, 맞습니다. 3번 "Acquisition Function 사용" 단계에서는 하이퍼파라미터 설정을 선택하는 것이 핵심입니다. Acquisition Function은 서로게이트 모델(가우시안 프로세스 등)의 예측 결과와 불확실성 정보를 바탕으로, 탐색(Exploration)과 활용(Exploitation) 사이의 균형을 맞추어 하이퍼파라미터 설정을 선택합니다.
 
@@ -44,6 +44,29 @@ Acquisition Function의 예로는 Probability of Improvement (PI), Expected Impr
 따라서, Acquisition Function은 베이지안 최적화 과정에서 새로운 하이퍼파라미터 설정을 선택하는 역할을 합니다. 이를 통해 더 나은 성능을 얻을 가능성이 있는 하이퍼파라미터 설정을 찾아내는 것이 목표입니다.
 
 </details>
+
+
+
+
+<details>
+<summary> <span style="color: blue; text-decoration: underline;"> 그럼 핵심은 함수값을 GP로 높고, 다음으로 관측할 지점을 어떤 decision rule을 통해 선택 한다음, 하이퍼 파라미터를 고르고, 실제 머신러닝 모델을 돌려보며 성능을 측정하는거야?</span> </summary>
+
+네, 맞습니다. 베이지안 최적화의 핵심은 목표 함수의 값을 높이기 위해 하이퍼파라미터를 조정하는 것입니다. 이를 위해 아래와 같은 과정을 거칩니다.
+
+서로게이트 모델(GP) 학습: 목표 함수의 값을 추정하기 위해 가우시안 프로세스(GP)와 같은 서로게이트 모델을 사용합니다. 이 모델은 목표 함수의 예측 평균과 불확실성(분산)을 제공합니다.
+
+Acquisition Function 사용: 탐색-활용 트레이드오프를 고려하여 다음으로 관측할 지점을 선택합니다. 이를 위해 Probability of Improvement (PI), Expected Improvement (EI), Upper Confidence Bound (UCB) 등의 decision rule을 사용할 수 있습니다.
+
+하이퍼파라미터 선택: Acquisition Function을 통해 계산된 점수를 기반으로 하이퍼파라미터 설정을 선택합니다.
+
+실제 머신러닝 모델 평가: 선택된 하이퍼파라미터로 머신러닝 모델을 학습시키고, 성능을 측정합니다. 이를 통해 목표 함수의 값을 얻습니다.
+
+반복: 새로운 하이퍼파라미터 설정과 목표 함수 값을 데이터에 추가하고, 서로게이트 모델을 업데이트한 다음, 다음 하이퍼파라미터 설정을 선택합니다. 이 과정은 미리 정의된 종료 조건이 충족될 때까지 반복됩니다.
+
+이렇게 베이지안 최적화를 통해 최적의 하이퍼파라미터를 찾아 머신러닝 모델의 성능을 높이는 것이 목표입니다. 이 방법은 그리드 탐색이나 랜덤 탐색보다 더 효율적으로 하이퍼파라미터를 최적화할 수 있습니다.
+
+</details>
+
 
 
 
